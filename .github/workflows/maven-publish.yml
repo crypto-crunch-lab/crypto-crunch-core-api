@@ -68,8 +68,8 @@ jobs:
         run: |
           aws deploy create-deployment \
           --application-name springboot-deploy-test \
-          --deployment-group-name crpyto-crunch-core-api-deploy-group \
+          --deployment-group-name crpyto-crunch-codedeploy-group \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=ywoo-springboot-deploy-test,bundleType=zip,key=crpyto-crunch-core-api-archieve.zip \
+          --s3-location bucket=crpyto-crunch-core-api-archieve,bundleType=zip,key=crpyto-crunch-core-api-archieve.zip \
           --region ap-northeast-2
 
