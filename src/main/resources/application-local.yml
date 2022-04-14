@@ -11,4 +11,4 @@ elasticsearch:
   scheme: https
   port: 443
   username: admin
-  password: ENC(seqL1L2p+jYtdboE4Brzjddu1ro0WqJ6mehHGci2TdY=)
+  password: ENC(s7+wu2i1tp+FNQqSnLFn1fnfvAaNnUcdHlAHv2pv65Y=)
