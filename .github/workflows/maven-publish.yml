@@ -31,7 +31,7 @@ jobs:
 
       # Build
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B package -DskipTests --file pom.xml
 
       # 전송할 파일을 담을 디렉토리 생성
       - name: Make Directory for deliver
