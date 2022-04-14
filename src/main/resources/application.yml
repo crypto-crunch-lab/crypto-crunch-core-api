@@ -11,7 +11,7 @@ elasticsearch:
   scheme: https
   port: 443
   username: admin
-  password: ENC(s7+wu2i1tp+FNQqSnLFn1fnfvAaNnUcdHlAHv2pv65Y=)
+  password: ENC(T3/wtgHBcIDlSANgxB5KOh5ZEhP13J4nzkLSdcXpGIw=)
 
 jasypt:
   encryptor:
