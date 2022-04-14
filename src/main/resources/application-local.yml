@@ -12,3 +12,8 @@ elasticsearch:
   port: 443
   username: admin
   password: ENC(s7+wu2i1tp+FNQqSnLFn1fnfvAaNnUcdHlAHv2pv65Y=)
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
