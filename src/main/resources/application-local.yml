@@ -3,7 +3,7 @@ server:
 
 spring:
   redis:
-    host: crpyto-crunch-redis-001.mzagiz.0001.apn2.cache.amazonaws.com
+    host: localhost
     port: 6379
 
 elasticsearch:
@@ -11,4 +11,4 @@ elasticsearch:
   scheme: https
   port: 443
   username: admin
-  password: ENC(seqL1L2p+jYtdboE4Brzjddu1ro0WqJ6mehHGci2TdY=)!
+  password: ENC(seqL1L2p+jYtdboE4Brzjddu1ro0WqJ6mehHGci2TdY=)
