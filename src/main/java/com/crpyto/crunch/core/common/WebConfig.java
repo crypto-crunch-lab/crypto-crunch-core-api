@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebConfig {
 
-    @Value("${jasypt.encryptor.password}")
-    private String password;
+    @Value("${JASYPT_PASSWORD}")
+    String password;
 
     @Bean
     public ObjectMapper objectMapper() {
