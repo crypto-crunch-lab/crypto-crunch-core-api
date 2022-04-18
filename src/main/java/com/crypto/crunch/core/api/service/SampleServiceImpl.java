@@ -1,4 +1,4 @@
-package com.crpyto.crunch.core.api.service;
+package com.crypto.crunch.core.api.service;
 
 import org.springframework.stereotype.Service;
 
