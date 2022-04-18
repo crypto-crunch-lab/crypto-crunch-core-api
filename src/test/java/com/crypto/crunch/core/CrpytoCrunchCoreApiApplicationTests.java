@@ -1,4 +1,4 @@
-package com.crpyto.crunch.core;
+package com.crypto.crunch.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;

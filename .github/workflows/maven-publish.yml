@@ -49,7 +49,7 @@ jobs:
 
       # 압축파일 형태로 전달
       - name: Make zip file
-        run: zip -r -qq -j ./crpyto-crunch-core-api-archieve.zip ./deploy
+        run: zip -r -qq -j ./crypto-crunch-core-api-archieve.zip ./deploy
 
       # S3 Bucket으로 copy
       - name: Deliver to AWS S3
@@ -60,7 +60,7 @@ jobs:
           aws s3 cp \
           --region ap-northeast-2 \
           --acl private \
-          ./crpyto-crunch-core-api-archieve.zip s3://crpyto-crunch-core-api-archieve/
+          ./crypto-crunch-core-api-archieve.zip s3://crypto-crunch-core-api-archieve/
 
       # Deploy
       - name: Deploy
@@ -69,9 +69,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws deploy create-deployment \
-          --application-name crpyto-crunch-codedeploy-app \
-          --deployment-group-name crpyto-crunch-codedeploy-group \
+          --application-name crypto-crunch-codedeploy-app \
+          --deployment-group-name crypto-crunch-codedeploy-group \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=crpyto-crunch-core-api-archieve,bundleType=zip,key=crpyto-crunch-core-api-archieve.zip \
+          --s3-location bucket=crypto-crunch-core-api-archieve,bundleType=zip,key=crypto-crunch-core-api-archieve.zip \
           --region ap-northeast-2
 

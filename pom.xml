@@ -8,11 +8,11 @@
         <version>2.6.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.crpyto.crunch</groupId>
+    <groupId>com.crypto.crunch</groupId>
     <artifactId>core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>crpyto-crunch-core-api</name>
-    <description>Crpyto Crunch Core API</description>
+    <name>crypto-crunch-core-api</name>
+    <description>Crypto Crunch Core API</description>
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>2021.0.1</spring-cloud.version>

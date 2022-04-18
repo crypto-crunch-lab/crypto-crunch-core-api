@@ -1,4 +1,4 @@
-package com.crpyto.crunch.core.common.elasticsearch;
+package com.crypto.crunch.core.common.elasticsearch;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

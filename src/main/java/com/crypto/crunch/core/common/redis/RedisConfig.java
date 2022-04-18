@@ -1,4 +1,4 @@
-package com.crpyto.crunch.core.common.redis;
+package com.crypto.crunch.core.common.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

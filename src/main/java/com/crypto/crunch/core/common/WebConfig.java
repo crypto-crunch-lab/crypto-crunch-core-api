@@ -1,4 +1,4 @@
-package com.crpyto.crunch.core.common;
+package com.crypto.crunch.core.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
