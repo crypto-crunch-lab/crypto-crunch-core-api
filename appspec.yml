@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/app/deploy/core-api
+    destination: /home/ubuntu/app/core-api/deploy
 permissions:
   - object: /
     pattern: "**"
