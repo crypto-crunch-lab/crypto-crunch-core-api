@@ -70,7 +70,7 @@ jobs:
         run: |
           aws deploy create-deployment \
           --application-name crypto-crunch-codedeploy-app \
-          --deployment-group-name crypto-crunch-codedeploy-group \
+          --deployment-group-name crypto-crunch-core-api-codedeploy-group \
           --file-exists-behavior OVERWRITE \
           --s3-location bucket=crypto-crunch-core-api-archieve,bundleType=zip,key=crypto-crunch-core-api-archieve.zip \
           --region ap-northeast-2
