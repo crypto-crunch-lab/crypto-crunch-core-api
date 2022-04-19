@@ -1,6 +1,5 @@
-package com.crypto.crunch.core.api.controller;
+package com.crypto.crunch.core.api.sample;
 
-import com.crypto.crunch.core.api.service.SampleService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
