@@ -1,6 +1,3 @@
-server:
-  port: 8081
-
 spring:
   redis:
     host: crpyto-crunch-redis-001.mzagiz.0001.apn2.cache.amazonaws.com
