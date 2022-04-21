@@ -1,14 +1,13 @@
 package com.crypto.crunch.core.api.defi;
 
 import com.crypto.crunch.core.domain.defi.Defi;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.crypto.crunch.core.domain.defi.DefiRequest;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/api/v1/defi")
+@RestController
 public class DefiController {
 
     private final DefiService defiService;
@@ -17,8 +16,13 @@ public class DefiController {
         this.defiService = defiService;
     }
 
-    @GetMapping
-    public List<Defi> getDefiList() throws Exception {
-        return defiService.getList();
+    @PostMapping
+    public List<Defi> searchDefi(@RequestBody DefiRequest request) throws Exception {
+        return defiService.search(request);
+    }
+
+    @GetMapping("/networks")
+    public List<String> getNetworks() throws Exception {
+        return defiService.getNetworks();
     }
 }
