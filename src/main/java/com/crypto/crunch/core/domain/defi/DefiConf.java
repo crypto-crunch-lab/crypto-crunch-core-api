@@ -16,15 +16,43 @@ public class DefiConf {
     }
 
     public enum DefiApyRangeType {
-        APY_0(0), APY_10(10), APY_30(30), APY_50(50), APY_100(100), APY_200(200), APY_500(500), APY_1000(1000);
+        APY_0(0.0), APY_10(0.1), APY_30(0.3), APY_50(0.5), APY_100(1.0), APY_200(2.0), APY_500(5.0), APY_1000(10.0);
 
-        private final Integer value;
+        private final Double value;
 
-        DefiApyRangeType(Integer value) {
+        DefiApyRangeType(Double value) {
             this.value = value;
         }
 
-        public Integer value() {
+        public Double value() {
+            return value;
+        }
+    }
+
+    public enum DefiCoinType {
+        LIQUIDITY_PROVIDER("유동성 공급"), SINGLE_COIN("단일코인"), STABLE_COIN("스테이블코인"), NO_IMPERMANENT_LOSS("비영구적 손실 없음");
+
+        private final String value;
+
+        DefiCoinType(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return value;
+        }
+    }
+
+    public enum DefiAttributeType {
+        SECURITY_AUDIT("유동성 공급"), VC_INVESTMENT("벤쳐캐피탈 투자유치"), REWARD_LOCK_UP("보상 Lock-up"), DEPOSIT_FEE("예치수수료"), DEPOSIT_LOCK_UP("에치금 Lock-up");
+
+        private final String value;
+
+        DefiAttributeType(String value) {
+            this.value = value;
+        }
+
+        public String value() {
             return value;
         }
     }

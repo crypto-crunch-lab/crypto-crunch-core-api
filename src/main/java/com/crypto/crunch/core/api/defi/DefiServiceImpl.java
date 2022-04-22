@@ -1,13 +1,18 @@
 package com.crypto.crunch.core.api.defi;
 
 import com.crypto.crunch.core.domain.defi.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -23,7 +28,9 @@ import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,7 +80,7 @@ public class DefiServiceImpl implements DefiService {
             DefiConf.DefiTvlRangeType tvlRange = filters.getTvlRange();
             DefiConf.DefiApyRangeType apyRange = filters.getApyRange();
 
-            if (StringUtils.isNotEmpty(network)) {
+            if (StringUtils.isNotEmpty(network) && !StringUtils.equals(network, "ALL")) {
                 subBoolQueryBuilder.must(QueryBuilders.termQuery("network.keyword", network));
             }
             if (!ObjectUtils.isEmpty(tvlRange)) {
@@ -120,9 +127,47 @@ public class DefiServiceImpl implements DefiService {
             return Collections.emptyList();
         }
 
-        return ((ParsedStringTerms) aggregation).getBuckets()
+        List<String> list = ((ParsedStringTerms) aggregation).getBuckets()
                 .stream()
                 .map(MultiBucketsAggregation.Bucket::getKeyAsString)
                 .collect(Collectors.toList());
+
+        list.add(0, "ALL");
+        return list;
+    }
+
+    @Override
+    public Map<String, Map<String, String>> getAdminMetaFields() {
+
+        Map<String, String> coinTypeMap = new HashMap<>();
+        for (DefiConf.DefiCoinType coinType : DefiConf.DefiCoinType.values()) {
+            coinTypeMap.put(coinType.name(), coinType.value());
+        }
+        Map<String, String> attributeTypeMap = new HashMap<>();
+        for (DefiConf.DefiAttributeType attributeType : DefiConf.DefiAttributeType.values()) {
+            attributeTypeMap.put(attributeType.name(), attributeType.value());
+        }
+
+        Map<String, Map<String, String>> response = new HashMap<>();
+        response.put("coinTypeMap", coinTypeMap);
+        response.put("attributeTypeMap", attributeTypeMap);
+
+        return response;
+    }
+
+    @Override
+    public void update(Defi defi) throws IOException {
+        UpdateRequest request = new UpdateRequest(DEFI_INDEX, defi.getId());
+        try {
+            request.doc(objectMapper.writeValueAsString(defi), XContentType.JSON);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        try {
+            UpdateResponse response = restHighLevelClient.update(request, RequestOptions.DEFAULT);
+            log.info(response.toString());
+        } catch (ElasticsearchException e) {
+            log.error(e.toString());
+        }
     }
 }
