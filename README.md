@@ -10,5 +10,12 @@
 - Swagger UI
   - http://server.crypto-crunch-tech.com:8080/swagger-ui/index.html
 
-- ElasticSearch Kibana
-  - https://search-crpyto-crunch-elasticsearch-y2o5bnrlo2pejnym25smqkflge.ap-northeast-2.es.amazonaws.com/_plugin/kibana/app/home
+- ElasticSearch
+  - (연결 도메인) search-crpyto-crunch-elasticsearch-y2o5bnrlo2pejnym25smqkflge.ap-northeast-2.es.amazonaws.com:443
+  - (키바나) https://search-crpyto-crunch-elasticsearch-y2o5bnrlo2pejnym25smqkflge.ap-northeast-2.es.amazonaws.com/_plugin/kibana/app/home
+  
+- Redis
+  - crpyto-crunch-redis.mzagiz.ng.0001.apn2.cache.amazonaws.com:6379
+  
+- Web Admin
+  - http://server.crypto-crunch-tech.com:3000
