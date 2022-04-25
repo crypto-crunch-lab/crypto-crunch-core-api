@@ -11,5 +11,5 @@ public interface DefiService {
     List<Defi> search(DefiRequest request) throws Exception;
     List<String> getNetworks() throws IOException;
     Map<String, Map<String, String>> getAdminMetaFields();
-    void update(Defi defi) throws IOException;
+    Boolean update(Defi defi) throws IOException;
 }

@@ -2,6 +2,7 @@ package com.crypto.crunch.core.api.defi;
 
 import com.crypto.crunch.core.domain.defi.Defi;
 import com.crypto.crunch.core.domain.defi.DefiRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -34,7 +35,8 @@ public class DefiController {
     }
 
     @PostMapping("/update")
-    public void updateDefi(@RequestBody Defi defi) throws IOException {
-        defiService.update(defi);
+    public ResponseEntity<Boolean> updateDefi(@RequestBody Defi defi) throws IOException {
+        Boolean isSuccess = defiService.update(defi);
+        return isSuccess ? ResponseEntity.ok().body(true) : ResponseEntity.badRequest().body(false);
     }
 }

@@ -156,18 +156,21 @@ public class DefiServiceImpl implements DefiService {
     }
 
     @Override
-    public void update(Defi defi) throws IOException {
+    public Boolean update(Defi defi) throws IOException {
         UpdateRequest request = new UpdateRequest(DEFI_INDEX, defi.getId());
         try {
             request.doc(objectMapper.writeValueAsString(defi), XContentType.JSON);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return false;
         }
         try {
             UpdateResponse response = restHighLevelClient.update(request, RequestOptions.DEFAULT);
             log.info(response.toString());
+            return true;
         } catch (ElasticsearchException e) {
             log.error(e.toString());
+            return false;
         }
     }
 }
