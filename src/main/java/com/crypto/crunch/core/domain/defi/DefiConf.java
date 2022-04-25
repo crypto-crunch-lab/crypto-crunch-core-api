@@ -44,7 +44,7 @@ public class DefiConf {
     }
 
     public enum DefiAttributeType {
-        SECURITY_AUDIT("유동성 공급"), VC_INVESTMENT("벤쳐캐피탈 투자유치"), REWARD_LOCK_UP("보상 Lock-up"), DEPOSIT_FEE("예치수수료"), DEPOSIT_LOCK_UP("에치금 Lock-up");
+        SECURITY_AUDIT("보안감사"), VC_INVESTMENT("벤쳐캐피탈 투자유치"), REWARD_LOCK_UP("보상 Lock-up"), DEPOSIT_FEE("예치수수료"), DEPOSIT_LOCK_UP("에치금 Lock-up");
 
         private final String value;
 
