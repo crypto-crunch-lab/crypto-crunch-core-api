@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -128,6 +130,15 @@ public class DefiServiceImpl implements DefiService {
 
         list.add(0, "ALL");
         return list;
+    }
+
+    @Override
+    public List<DefiHistory> getHistories(String id) throws IOException {
+        GetRequest getRequest = new GetRequest(DefiConf.DEFI_INDEX, id);
+        restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+
+        GetResponse response = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+        return objectMapper.readValue(response.getSourceAsString(), Defi.class).getHistories();
     }
 
     @Override

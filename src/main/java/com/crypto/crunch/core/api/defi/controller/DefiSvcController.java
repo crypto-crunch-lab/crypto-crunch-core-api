@@ -2,9 +2,11 @@ package com.crypto.crunch.core.api.defi.controller;
 
 import com.crypto.crunch.core.api.defi.service.DefiService;
 import com.crypto.crunch.core.domain.defi.Defi;
+import com.crypto.crunch.core.domain.defi.DefiHistory;
 import com.crypto.crunch.core.domain.defi.DefiRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,5 +30,10 @@ public class DefiSvcController {
     @GetMapping("/networks")
     public List<String> getNetworks() throws Exception {
         return defiService.getNetworks();
+    }
+
+    @GetMapping("/histories/{id}")
+    public List<DefiHistory> getHistories(@PathVariable("id") String id) throws IOException {
+        return defiService.getHistories(id);
     }
 }

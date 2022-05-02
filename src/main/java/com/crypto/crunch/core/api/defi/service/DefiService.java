@@ -1,6 +1,7 @@
 package com.crypto.crunch.core.api.defi.service;
 
 import com.crypto.crunch.core.domain.defi.Defi;
+import com.crypto.crunch.core.domain.defi.DefiHistory;
 import com.crypto.crunch.core.domain.defi.DefiRequest;
 
 import java.io.IOException;
@@ -24,6 +25,17 @@ public interface DefiService {
      * @throws IOException
      */
     List<String> getNetworks() throws IOException;
+
+    /**
+     * 디파이 히스토리(차트) 조회
+     *
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    List<DefiHistory> getHistories(String id) throws IOException;
+
+    ;
 
     /**
      * 디파이 업데이트

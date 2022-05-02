@@ -19,8 +19,10 @@ public class Defi {
     private Double apy;
     private Long tvl;
     private Integer risk;
-    private String icon;
-    private String link;
+    private String defiIconUrl;
+    private String platformIconUrl;
+    private String detailUrl;
     private DefiConf.DefiCoinType coinType;
     private List<DefiConf.DefiAttributeType> attributes;
+    private List<DefiHistory> histories;
 }
