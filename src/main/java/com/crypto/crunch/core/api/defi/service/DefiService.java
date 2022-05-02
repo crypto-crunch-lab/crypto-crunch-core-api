@@ -35,8 +35,6 @@ public interface DefiService {
      */
     List<DefiHistory> getHistories(String id) throws IOException;
 
-    ;
-
     /**
      * 디파이 업데이트
      *
