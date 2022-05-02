@@ -1,4 +1,4 @@
-package com.crypto.crunch.core.api.defi;
+package com.crypto.crunch.core.api.defi.service;
 
 import com.crypto.crunch.core.domain.defi.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -28,9 +30,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,10 +41,6 @@ public class DefiServiceImpl implements DefiService {
     private final RestHighLevelClient restHighLevelClient;
     private final ObjectMapper objectMapper;
 
-    private static final String DEFI_INDEX = "defi";
-    private static final int DEFAULT_SEARCH_SIZE = 5000;
-    private static final String DEFAULT_SORT_FIELD = "tvl";
-
     public DefiServiceImpl(RestHighLevelClient restHighLevelClient, ObjectMapper objectMapper) {
         this.restHighLevelClient = restHighLevelClient;
         this.objectMapper = objectMapper;
@@ -52,9 +48,9 @@ public class DefiServiceImpl implements DefiService {
 
     @Override
     public List<Defi> search(DefiRequest request) throws Exception {
-        SearchRequest searchRequest = new SearchRequest(DEFI_INDEX);
+        SearchRequest searchRequest = new SearchRequest(DefiConf.DEFI_INDEX);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.size(ObjectUtils.isEmpty(request.getSize()) ? DEFAULT_SEARCH_SIZE : request.getSize());
+        searchSourceBuilder.size(ObjectUtils.isEmpty(request.getSize()) ? DefiConf.DEFI_INDEX_DEFAULT_SEARCH_SIZE : request.getSize());
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
@@ -63,7 +59,7 @@ public class DefiServiceImpl implements DefiService {
         }
 
         if (ObjectUtils.isEmpty(request.getSorts())) {
-            searchSourceBuilder.sort(DEFAULT_SORT_FIELD, SortOrder.DESC);
+            searchSourceBuilder.sort(DefiConf.DEFI_INDEX_DEFAULT_SORT_FIELD, SortOrder.DESC);
         } else {
             DefiRequestSorts sorts = request.getSorts();
             String field = sorts.getField();
@@ -112,7 +108,7 @@ public class DefiServiceImpl implements DefiService {
 
     @Override
     public List<String> getNetworks() throws IOException {
-        SearchRequest searchRequest = new SearchRequest(DEFI_INDEX);
+        SearchRequest searchRequest = new SearchRequest(DefiConf.DEFI_INDEX);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         AggregationBuilder aggregationBuilder = AggregationBuilders
                 .terms("terms")
@@ -137,27 +133,17 @@ public class DefiServiceImpl implements DefiService {
     }
 
     @Override
-    public Map<String, Map<String, String>> getAdminMetaFields() {
+    public List<DefiHistory> getHistories(String id) throws IOException {
+        GetRequest getRequest = new GetRequest(DefiConf.DEFI_INDEX, id);
+        restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
 
-        Map<String, String> coinTypeMap = new HashMap<>();
-        for (DefiConf.DefiCoinType coinType : DefiConf.DefiCoinType.values()) {
-            coinTypeMap.put(coinType.name(), coinType.value());
-        }
-        Map<String, String> attributeTypeMap = new HashMap<>();
-        for (DefiConf.DefiAttributeType attributeType : DefiConf.DefiAttributeType.values()) {
-            attributeTypeMap.put(attributeType.name(), attributeType.value());
-        }
-
-        Map<String, Map<String, String>> response = new HashMap<>();
-        response.put("coinTypeMap", coinTypeMap);
-        response.put("attributeTypeMap", attributeTypeMap);
-
-        return response;
+        GetResponse response = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+        return objectMapper.readValue(response.getSourceAsString(), Defi.class).getHistories();
     }
 
     @Override
     public Boolean update(Defi defi) throws IOException {
-        UpdateRequest request = new UpdateRequest(DEFI_INDEX, defi.getId());
+        UpdateRequest request = new UpdateRequest(DefiConf.DEFI_INDEX, defi.getId());
         try {
             request.doc(objectMapper.writeValueAsString(defi), XContentType.JSON);
         } catch (JsonProcessingException e) {

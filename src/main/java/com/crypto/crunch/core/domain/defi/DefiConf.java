@@ -1,6 +1,10 @@
 package com.crypto.crunch.core.domain.defi;
 
 public class DefiConf {
+    public static final String DEFI_INDEX = "defi";
+    public static final Integer DEFI_INDEX_DEFAULT_SEARCH_SIZE = 5000;
+    public static final String DEFI_INDEX_DEFAULT_SORT_FIELD = "tvl";
+
     public enum DefiTvlRangeType {
         TVL_0(0), TVL_10K(1000), TVL_100K(10000), TVL_1M(1000000), TVL_10M(10000000), TVL_100M(100000000);
 

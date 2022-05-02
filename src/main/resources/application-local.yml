@@ -10,6 +10,18 @@ elasticsearch:
   username: admin
   password: ENC(T3/wtgHBcIDlSANgxB5KOh5ZEhP13J4nzkLSdcXpGIw=)
 
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(Dl9xDo34hmWgfvs6vfP1gr8f2sbOT2D7a5Hd+zLgMqE=)
+      secretKey: ENC(9iYqH/kXCTiHgr3XEAVoKaP5fC8R6tLea7Y85w74A9tB6fmWtl2hcBIcZBzyPrZ41aK4gxSf4PI=)
+    s3:
+      bucket: crypto-crunch-static
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
