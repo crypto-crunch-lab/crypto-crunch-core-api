@@ -1,14 +1,16 @@
 package com.crypto.crunch.core.api.defi.service;
 
 import com.crypto.crunch.core.domain.defi.conf.DefiConf;
-import com.crypto.crunch.core.domain.defi.model.*;
+import com.crypto.crunch.core.domain.defi.model.Defi;
+import com.crypto.crunch.core.domain.defi.model.DefiRequest;
+import com.crypto.crunch.core.domain.defi.model.DefiRequestFilters;
+import com.crypto.crunch.core.domain.defi.model.DefiRequestSorts;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -91,6 +93,7 @@ public class DefiServiceImpl implements DefiService {
         }
 
         searchSourceBuilder.query(boolQueryBuilder);
+        searchSourceBuilder.fetchSource(null, new String[]{"apySeries", "tvlSeries"});
         searchRequest.source(searchSourceBuilder);
 
         SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
