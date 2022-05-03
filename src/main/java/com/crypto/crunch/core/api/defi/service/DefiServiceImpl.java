@@ -108,6 +108,13 @@ public class DefiServiceImpl implements DefiService {
     }
 
     @Override
+    public Defi getDefiById(String id) throws IOException {
+        GetRequest getRequest = new GetRequest(DefiConf.DEFI_INDEX, id);
+        restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+        return objectMapper.readValue(restHighLevelClient.get(getRequest, RequestOptions.DEFAULT).getSourceAsString(), Defi.class);
+    }
+
+    @Override
     public List<String> getNetworks() throws IOException {
         SearchRequest searchRequest = new SearchRequest(DefiConf.DEFI_INDEX);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -131,15 +138,6 @@ public class DefiServiceImpl implements DefiService {
 
         list.add(0, "ALL");
         return list;
-    }
-
-    @Override
-    public List<DefiHistory> getHistories(String id) throws IOException {
-        GetRequest getRequest = new GetRequest(DefiConf.DEFI_INDEX, id);
-        restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
-
-        GetResponse response = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
-        return objectMapper.readValue(response.getSourceAsString(), Defi.class).getHistories();
     }
 
     @Override

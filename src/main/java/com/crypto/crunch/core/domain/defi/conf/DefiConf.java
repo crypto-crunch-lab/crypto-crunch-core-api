@@ -34,7 +34,7 @@ public class DefiConf {
     }
 
     public enum DefiCoinType {
-        LIQUIDITY_PROVIDER("유동성 공급"), SINGLE_COIN("단일코인"), STABLE_COIN("스테이블코인"), NO_IMPERMANENT_LOSS("비영구적 손실 없음");
+        LP_TOKEN("LP 토큰"), SINGLE_COIN("단일 코인"), STABLE_COIN("스테이블 코인"), NO_IMPERMANENT_LOSS("비영구적 손실 없음");
 
         private final String value;
 
@@ -59,5 +59,9 @@ public class DefiConf {
         public String value() {
             return value;
         }
+    }
+
+    public enum DefiHistoryType {
+        APY, TVL
     }
 }

@@ -19,21 +19,20 @@ public interface DefiService {
     List<Defi> search(DefiRequest request) throws Exception;
 
     /**
+     * 디파이 조회
+     * @param id
+     * @return
+     * @throws IOException
+     */
+    Defi getDefiById(String id) throws IOException;
+
+    /**
      * 전체 네트워크 조회
      *
      * @return
      * @throws IOException
      */
     List<String> getNetworks() throws IOException;
-
-    /**
-     * 디파이 히스토리(차트) 조회
-     *
-     * @param id
-     * @return
-     * @throws IOException
-     */
-    List<DefiHistory> getHistories(String id) throws IOException;
 
     /**
      * 디파이 업데이트

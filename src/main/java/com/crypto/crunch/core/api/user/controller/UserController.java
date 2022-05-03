@@ -2,12 +2,15 @@ package com.crypto.crunch.core.api.user.controller;
 
 import com.crypto.crunch.core.api.common.model.DefaultResponse;
 import com.crypto.crunch.core.api.user.service.UserService;
-import com.crypto.crunch.core.domain.user.model.User;
 import com.crypto.crunch.core.domain.user.exception.UserException;
+import com.crypto.crunch.core.domain.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequestMapping("/api/v1/user")
@@ -21,9 +24,9 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<DefaultResponse> signup(@RequestBody User user) {
+    public ResponseEntity<DefaultResponse<?>> signup(@RequestBody User user) {
         try {
-            return new ResponseEntity<>(DefaultResponse.builder()
+            return new ResponseEntity<>(DefaultResponse.<User>builder()
                     .data(userService.save(user))
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.CREATED.value())
@@ -50,9 +53,9 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<DefaultResponse> signin(@RequestBody User user) {
+    public ResponseEntity<DefaultResponse<?>> signin(@RequestBody User user) {
         try {
-            DefaultResponse response = DefaultResponse.builder()
+            DefaultResponse<User> response = DefaultResponse.<User>builder()
                     .data(userService.authenticate(user))
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.OK.value())
