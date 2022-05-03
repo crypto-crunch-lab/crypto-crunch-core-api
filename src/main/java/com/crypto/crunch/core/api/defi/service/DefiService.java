@@ -1,8 +1,8 @@
 package com.crypto.crunch.core.api.defi.service;
 
-import com.crypto.crunch.core.domain.defi.Defi;
-import com.crypto.crunch.core.domain.defi.DefiHistory;
-import com.crypto.crunch.core.domain.defi.DefiRequest;
+import com.crypto.crunch.core.domain.defi.model.Defi;
+import com.crypto.crunch.core.domain.defi.model.DefiHistory;
+import com.crypto.crunch.core.domain.defi.model.DefiRequest;
 
 import java.io.IOException;
 import java.util.List;

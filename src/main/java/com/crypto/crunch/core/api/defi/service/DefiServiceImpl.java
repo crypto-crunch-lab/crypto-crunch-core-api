@@ -1,6 +1,7 @@
 package com.crypto.crunch.core.api.defi.service;
 
-import com.crypto.crunch.core.domain.defi.*;
+import com.crypto.crunch.core.domain.defi.conf.DefiConf;
+import com.crypto.crunch.core.domain.defi.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

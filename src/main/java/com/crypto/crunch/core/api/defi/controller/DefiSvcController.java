@@ -1,17 +1,19 @@
 package com.crypto.crunch.core.api.defi.controller;
 
+import com.crypto.crunch.core.api.common.model.DefaultResponse;
 import com.crypto.crunch.core.api.defi.service.DefiService;
-import com.crypto.crunch.core.domain.defi.Defi;
-import com.crypto.crunch.core.domain.defi.DefiHistory;
-import com.crypto.crunch.core.domain.defi.DefiRequest;
+import com.crypto.crunch.core.domain.defi.model.DefiRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * 디파이 서비스 API Controller
  */
+@Slf4j
 @RequestMapping("/api/v1/defi/svc")
 @RestController
 public class DefiSvcController {
@@ -23,17 +25,45 @@ public class DefiSvcController {
     }
 
     @PostMapping
-    public List<Defi> searchDefi(@RequestBody DefiRequest request) throws Exception {
-        return defiService.search(request);
+    public ResponseEntity<DefaultResponse> searchDefi(@RequestBody DefiRequest request) {
+
+        try {
+            return new ResponseEntity<>(DefaultResponse.builder()
+                    .data(defiService.search(request))
+                    .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
+                    .status(HttpStatus.OK.value())
+                    .build(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.format("error message : %s", e.getMessage()), e);
+            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/networks")
-    public List<String> getNetworks() throws Exception {
-        return defiService.getNetworks();
+    public ResponseEntity<DefaultResponse> getNetworks() {
+        try {
+            return new ResponseEntity<>(DefaultResponse.builder()
+                    .data(defiService.getNetworks())
+                    .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
+                    .status(HttpStatus.OK.value())
+                    .build(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.format("error message : %s", e.getMessage()), e);
+            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/histories/{id}")
-    public List<DefiHistory> getHistories(@PathVariable("id") String id) throws IOException {
-        return defiService.getHistories(id);
+    public ResponseEntity<DefaultResponse> getHistories(@PathVariable("id") String id) throws IOException {
+        try {
+            return new ResponseEntity<>(DefaultResponse.builder()
+                    .data(defiService.getHistories(id))
+                    .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
+                    .status(HttpStatus.OK.value())
+                    .build(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error(String.format("error message : %s", e.getMessage()), e);
+            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

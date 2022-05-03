@@ -1,4 +1,4 @@
-package com.crypto.crunch.core.domain.defi;
+package com.crypto.crunch.core.domain.defi.conf;
 
 public class DefiConf {
     public static final String DEFI_INDEX = "defi";

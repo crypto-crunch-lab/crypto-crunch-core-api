@@ -1,4 +1,4 @@
-package com.crypto.crunch.core.domain.defi;
+package com.crypto.crunch.core.domain.defi.model;
 
 import lombok.Data;
 
