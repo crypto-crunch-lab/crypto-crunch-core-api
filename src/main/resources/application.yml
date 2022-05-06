@@ -2,6 +2,16 @@ spring:
   redis:
     host: crpyto-crunch-redis.mzagiz.ng.0001.apn2.cache.amazonaws.com
     port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ENC(x5kLR3r/TpcH9z9ku5H7UxaHgKzJrf8tfrrIqne5Q2g=)
+    url: jdbc:mysql://crypto-crunch-mysql.cs2bkvg2aoc3.ap-northeast-2.rds.amazonaws.com/crypto_crunch?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: crunch_admin
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    show-sql: true
 
 elasticsearch:
   host: search-crpyto-crunch-elasticsearch-y2o5bnrlo2pejnym25smqkflge.ap-northeast-2.es.amazonaws.com
@@ -9,6 +19,18 @@ elasticsearch:
   port: 443
   username: admin
   password: ENC(T3/wtgHBcIDlSANgxB5KOh5ZEhP13J4nzkLSdcXpGIw=)
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(Dl9xDo34hmWgfvs6vfP1gr8f2sbOT2D7a5Hd+zLgMqE=)
+      secretKey: ENC(9iYqH/kXCTiHgr3XEAVoKaP5fC8R6tLea7Y85w74A9tB6fmWtl2hcBIcZBzyPrZ41aK4gxSf4PI=)
+    s3:
+      bucket: crypto-crunch-static
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
 jasypt:
   encryptor:
