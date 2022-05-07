@@ -1,11 +1,14 @@
 package com.crypto.crunch.core.api.user.service;
 
 import com.crypto.crunch.core.api.user.repository.UserRepository;
+import com.crypto.crunch.core.common.jwt.JwtTokenProvider;
+import com.crypto.crunch.core.common.jwt.UserAuthentication;
 import com.crypto.crunch.core.domain.user.model.User;
 import com.crypto.crunch.core.domain.user.exception.UserException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User authenticate(User user) {
+    public String authenticate(User user) {
         String email = user.getEmail();
         String password = user.getPassword();
 
@@ -49,8 +52,14 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(password, savedUser.getPassword())) {
             throw UserException.AUTHENTICATION_FAIL;
         }
-        savedUser.setPassword(null);
-        return savedUser;
+        Authentication authentication = new UserAuthentication(savedUser.getId().toString(), null, null);
+        return JwtTokenProvider.generateToken(authentication);
+    }
+
+    @Override
+    public User getUserByToken(String token) {
+        int userId = Integer.parseInt(JwtTokenProvider.getUserIdFromJWT(token));
+        return userRepository.findById(userId).orElseThrow(() -> UserException.DB_TRANSACTION_FAIL);
     }
 
     private void isValid(User user) {
