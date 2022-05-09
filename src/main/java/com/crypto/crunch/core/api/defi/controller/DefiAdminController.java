@@ -25,8 +25,8 @@ public class DefiAdminController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Boolean> updateDefi(@RequestBody Defi defi) throws IOException {
-        Boolean isSuccess = defiService.update(defi);
+    public ResponseEntity<Boolean> updateDefiMeta(@RequestBody Defi defi) throws IOException {
+        Boolean isSuccess = defiService.updateDefiMeta(defi);
         if (isSuccess) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

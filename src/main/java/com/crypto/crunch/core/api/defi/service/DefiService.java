@@ -35,11 +35,11 @@ public interface DefiService {
     List<String> getNetworks() throws IOException;
 
     /**
-     * 디파이 업데이트
+     * 디파이 메타 정보 업데이트
      *
      * @param defi
      * @return
      * @throws IOException
      */
-    Boolean update(Defi defi) throws IOException;
+    Boolean updateDefiMeta(Defi defi) throws IOException;
 }

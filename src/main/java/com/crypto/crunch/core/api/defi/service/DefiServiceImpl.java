@@ -9,12 +9,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -144,21 +144,39 @@ public class DefiServiceImpl implements DefiService {
     }
 
     @Override
-    public Boolean update(Defi defi) throws IOException {
-        UpdateRequest request = new UpdateRequest(DefiConf.DEFI_INDEX, defi.getId());
-        try {
-            request.doc(objectMapper.writeValueAsString(defi), XContentType.JSON);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
+    public Boolean updateDefiMeta(Defi defi) throws IOException {
+        String platform = defi.getPlatform();
+        SearchRequest searchRequest = new SearchRequest(DefiConf.DEFI_INDEX);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termQuery("platform.keyword", platform));
+        searchSourceBuilder.fetchSource(null, new String[]{"apySeries", "tvlSeries"});
+        searchRequest.source(searchSourceBuilder);
+
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        List<Defi> defiList = Stream.of(searchResponse.getHits().getHits())
+                .map(SearchHit::getSourceAsString)
+                .map(str -> {
+                    try {
+                        return objectMapper.readValue(str, Defi.class);
+                    } catch (IOException e) {
+                        log.error("error: {}", e.getMessage());
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
+
+        BulkRequest bulkRequest = new BulkRequest();
+        for (Defi d : defiList) {
+            UpdateRequest updateRequest = new UpdateRequest(DefiConf.DEFI_INDEX, d.getId());
+            try {
+                updateRequest.doc(objectMapper.writeValueAsString(defi), XContentType.JSON);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return false;
+            }
+            bulkRequest.add(updateRequest);
         }
-        try {
-            UpdateResponse response = restHighLevelClient.update(request, RequestOptions.DEFAULT);
-            log.info(response.toString());
-            return true;
-        } catch (ElasticsearchException e) {
-            log.error(e.toString());
-            return false;
-        }
+        BulkResponse bulkResponse = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+        return !bulkResponse.hasFailures();
     }
 }
