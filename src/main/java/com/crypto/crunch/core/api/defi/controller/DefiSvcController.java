@@ -26,7 +26,7 @@ public class DefiSvcController {
     }
 
     @PostMapping
-    public ResponseEntity<DefaultResponse<?>> searchDefi(@RequestBody DefiRequest request) {
+    public ResponseEntity<DefaultResponse<List<Defi>>> searchDefi(@RequestBody DefiRequest request) {
 
         try {
             return new ResponseEntity<>(DefaultResponse.<List<Defi>>builder()
@@ -36,12 +36,12 @@ public class DefiSvcController {
                     .build(), HttpStatus.OK);
         } catch (Exception e) {
             log.error(String.format("error message : %s", e.getMessage()), e);
-            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultResponse.createFail(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DefaultResponse<?>> getDefiById(@PathVariable("id") String id) {
+    public ResponseEntity<DefaultResponse<Defi>> getDefiById(@PathVariable("id") String id) {
         try {
             return new ResponseEntity<>(DefaultResponse.<Defi>builder()
                     .data(defiService.getDefiById(id))
@@ -50,12 +50,12 @@ public class DefiSvcController {
                     .build(), HttpStatus.OK);
         } catch (Exception e) {
             log.error(String.format("error message : %s", e.getMessage()), e);
-            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultResponse.createFail(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/networks")
-    public ResponseEntity<DefaultResponse<?>> getNetworks() {
+    public ResponseEntity<DefaultResponse<List<String>>> getNetworks() {
         try {
             return new ResponseEntity<>(DefaultResponse.<List<String>>builder()
                     .data(defiService.getNetworks())
@@ -64,7 +64,7 @@ public class DefiSvcController {
                     .build(), HttpStatus.OK);
         } catch (Exception e) {
             log.error(String.format("error message : %s", e.getMessage()), e);
-            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultResponse.createFail(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

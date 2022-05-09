@@ -25,4 +25,8 @@ public class DefaultResponse<T> {
         this.message = message;
         this.data = t;
     }
+
+    public static <T> DefaultResponse<T> createFail() {
+        return new DefaultResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "INTERNAL_SERVER_ERROR");
+    }
 }

@@ -52,10 +52,7 @@ public class UserController {
             }
         } catch (Exception e) {
             log.error(String.format("error message : %s", e.getMessage()), e);
-            return new ResponseEntity<>(DefaultResponse.<LoginResponse>builder()
-                    .message(e.getMessage())
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .build(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultResponse.createFail(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
