@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<DefaultResponse<?>> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<DefaultResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest) {
         try {
             LoginResponse response = userService.authenticate(loginRequest);
             HttpStatus status = response.getAuthType().equals(UserConf.UserAuthType.SIGNUP) ? HttpStatus.CREATED : HttpStatus.OK;
@@ -40,19 +40,22 @@ public class UserController {
 
             UserException.UserExceptionType exceptionType = e.getType();
             if (exceptionType.equals(UserException.UserExceptionType.NOT_VALID_REQUEST)) {
-                return new ResponseEntity<>(DefaultResponse.builder()
+                return new ResponseEntity<>(DefaultResponse.<LoginResponse>builder()
                         .message(e.getMessage())
                         .status(HttpStatus.BAD_REQUEST.value())
                         .build(), HttpStatus.BAD_REQUEST);
             } else {
-                return new ResponseEntity<>(DefaultResponse.builder()
+                return new ResponseEntity<>(DefaultResponse.<LoginResponse>builder()
                         .message(e.getMessage())
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .build(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
             log.error(String.format("error message : %s", e.getMessage()), e);
-            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultResponse.<LoginResponse>builder()
+                    .message(e.getMessage())
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .build(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

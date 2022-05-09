@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/v2/api-docs", "/swagger*/**").permitAll()
                 .antMatchers("/api/v1/user/**").permitAll()
                 .antMatchers("/api/v1/defi/**").permitAll()
                 .anyRequest().authenticated()
