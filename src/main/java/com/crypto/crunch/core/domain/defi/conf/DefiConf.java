@@ -34,7 +34,7 @@ public class DefiConf {
     }
 
     public enum DefiCoinType {
-        LP_TOKEN("LP 토큰"), SINGLE_COIN("단일 코인"), STABLE_COIN("스테이블 코인"), NO_IMPERMANENT_LOSS("비영구적 손실 없음");
+        NONE("미설정"), LP_TOKEN("LP 토큰"), SINGLE_COIN("단일 코인"), STABLE_COIN("스테이블 코인"), NO_IMPERMANENT_LOSS("비영구적 손실 없음");
 
         private final String value;
 

@@ -169,7 +169,9 @@ public class DefiServiceImpl implements DefiService {
         for (Defi d : defiList) {
             UpdateRequest updateRequest = new UpdateRequest(DefiConf.DEFI_INDEX, d.getId());
             try {
-                updateRequest.doc(objectMapper.writeValueAsString(defi), XContentType.JSON);
+                d.setCoinType(defi.getCoinType());
+                d.setAttributes(defi.getAttributes());
+                updateRequest.doc(objectMapper.writeValueAsString(d), XContentType.JSON);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
                 return false;
