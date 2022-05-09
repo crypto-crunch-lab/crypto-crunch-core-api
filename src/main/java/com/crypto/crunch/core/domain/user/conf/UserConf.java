@@ -4,4 +4,7 @@ public class UserConf {
     public enum UserLoginType {
         DIRECT, KAKAO, GOOGLE,
     }
+    public enum UserAuthType {
+        SIGNUP, LOGIN
+    }
 }

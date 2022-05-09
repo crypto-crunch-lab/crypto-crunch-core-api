@@ -2,12 +2,17 @@ package com.crypto.crunch.core.api.user.controller;
 
 import com.crypto.crunch.core.api.common.model.DefaultResponse;
 import com.crypto.crunch.core.api.user.service.UserService;
+import com.crypto.crunch.core.domain.user.conf.UserConf;
 import com.crypto.crunch.core.domain.user.exception.UserException;
-import com.crypto.crunch.core.domain.user.model.User;
+import com.crypto.crunch.core.domain.user.model.LoginRequest;
+import com.crypto.crunch.core.domain.user.model.LoginResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequestMapping("/api/v1/user")
@@ -20,14 +25,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<DefaultResponse<?>> signup(@RequestBody User user) {
+    @PostMapping("/login")
+    public ResponseEntity<DefaultResponse<?>> login(@RequestBody LoginRequest loginRequest) {
         try {
-            return new ResponseEntity<>(DefaultResponse.<User>builder()
-                    .data(userService.save(user))
+            LoginResponse response = userService.authenticate(loginRequest);
+            HttpStatus status = response.getAuthType().equals(UserConf.UserAuthType.SIGNUP) ? HttpStatus.CREATED : HttpStatus.OK;
+            return new ResponseEntity<>(DefaultResponse.<LoginResponse>builder()
+                    .data(response)
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
-                    .status(HttpStatus.CREATED.value())
-                    .build(), HttpStatus.CREATED);
+                    .status(status.value())
+                    .build(), status);
         } catch (UserException e) {
             log.error(String.format("error message : %s", e.getMessage()), e);
 
@@ -43,28 +50,6 @@ public class UserController {
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .build(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (Exception e) {
-            log.error(String.format("error message : %s", e.getMessage()), e);
-            return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/signin")
-    public ResponseEntity<DefaultResponse<?>> signin(@RequestBody User user) {
-        try {
-            DefaultResponse<String> response = DefaultResponse.<String>builder()
-                    .data(userService.authenticate(user))
-                    .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
-                    .status(HttpStatus.OK.value())
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (UserException e) {
-            log.error(String.format("error message : %s, email: %s", e.getMessage(), user.getEmail()), e);
-
-            return new ResponseEntity<>(DefaultResponse.builder()
-                    .message(e.getMessage())
-                    .status(HttpStatus.NOT_FOUND.value())
-                    .build(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             log.error(String.format("error message : %s", e.getMessage()), e);
             return new ResponseEntity<>(DefaultResponse.FAIL_DEFAULT_RES, HttpStatus.INTERNAL_SERVER_ERROR);

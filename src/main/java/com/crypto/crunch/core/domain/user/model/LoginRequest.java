@@ -4,8 +4,8 @@ import com.crypto.crunch.core.domain.user.conf.UserConf;
 import lombok.Data;
 
 @Data
-public class UserCreateRequest {
+public class LoginRequest {
     private String email;
-    private String password;
+    private String authKey;
     private UserConf.UserLoginType loginType;
 }
