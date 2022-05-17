@@ -1,25 +1,21 @@
 package com.crypto.crunch.core.api.defi.service;
 
 import com.crypto.crunch.core.domain.defi.conf.DefiConf;
-import com.crypto.crunch.core.domain.defi.model.Defi;
-import com.crypto.crunch.core.domain.defi.model.DefiRequest;
-import com.crypto.crunch.core.domain.defi.model.DefiRequestFilters;
-import com.crypto.crunch.core.domain.defi.model.DefiRequestSorts;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.crypto.crunch.core.domain.defi.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.bulk.BulkRequest;
-import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -113,7 +109,6 @@ public class DefiServiceImpl implements DefiService {
     @Override
     public Defi getDefiById(String id) throws IOException {
         GetRequest getRequest = new GetRequest(DefiConf.DEFI_INDEX, id);
-        restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
         return objectMapper.readValue(restHighLevelClient.get(getRequest, RequestOptions.DEFAULT).getSourceAsString(), Defi.class);
     }
 
@@ -144,41 +139,33 @@ public class DefiServiceImpl implements DefiService {
     }
 
     @Override
-    public Boolean updateDefiMeta(Defi defi) throws IOException {
-        String platform = defi.getPlatform();
-        SearchRequest searchRequest = new SearchRequest(DefiConf.DEFI_INDEX);
+    public List<DefiPlatform> getPlatforms() throws IOException {
+        SearchRequest searchRequest = new SearchRequest(DefiConf.DEFI_PLATFORM_INDEX);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.termQuery("platform.keyword", platform));
-        searchSourceBuilder.fetchSource(null, new String[]{"apySeries", "tvlSeries"});
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        searchSourceBuilder.sort("name.keyword");
+        searchSourceBuilder.size(DefiConf.DEFI_PLATFORM_INDEX_DEFAULT_SEARCH_SIZE);
         searchRequest.source(searchSourceBuilder);
 
-        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        List<Defi> defiList = Stream.of(searchResponse.getHits().getHits())
+        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        return Stream.of(response.getHits().getHits())
                 .map(SearchHit::getSourceAsString)
                 .map(str -> {
                     try {
-                        return objectMapper.readValue(str, Defi.class);
+                        return objectMapper.readValue(str, DefiPlatform.class);
                     } catch (IOException e) {
                         log.error("error: {}", e.getMessage());
                         return null;
                     }
                 })
                 .collect(Collectors.toList());
+    }
 
-        BulkRequest bulkRequest = new BulkRequest();
-        for (Defi d : defiList) {
-            UpdateRequest updateRequest = new UpdateRequest(DefiConf.DEFI_INDEX, d.getId());
-            try {
-                d.setCoinType(defi.getCoinType());
-                d.setAttributes(defi.getAttributes());
-                updateRequest.doc(objectMapper.writeValueAsString(d), XContentType.JSON);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                return false;
-            }
-            bulkRequest.add(updateRequest);
-        }
-        BulkResponse bulkResponse = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
-        return !bulkResponse.hasFailures();
+    @Override
+    public Boolean updatePlatform(DefiPlatform platform) throws IOException {
+        UpdateRequest updateRequest = new UpdateRequest(DefiConf.DEFI_PLATFORM_INDEX, platform.getId());
+        updateRequest.doc(objectMapper.writeValueAsString(platform), XContentType.JSON);
+        UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+        return updateResponse.status().equals(RestStatus.OK);
     }
 }

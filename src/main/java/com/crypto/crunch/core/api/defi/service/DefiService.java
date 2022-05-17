@@ -2,6 +2,7 @@ package com.crypto.crunch.core.api.defi.service;
 
 import com.crypto.crunch.core.domain.defi.model.Defi;
 import com.crypto.crunch.core.domain.defi.model.DefiHistory;
+import com.crypto.crunch.core.domain.defi.model.DefiPlatform;
 import com.crypto.crunch.core.domain.defi.model.DefiRequest;
 
 import java.io.IOException;
@@ -34,12 +35,7 @@ public interface DefiService {
      */
     List<String> getNetworks() throws IOException;
 
-    /**
-     * 디파이 메타 정보 업데이트
-     *
-     * @param defi
-     * @return
-     * @throws IOException
-     */
-    Boolean updateDefiMeta(Defi defi) throws IOException;
+    List<DefiPlatform> getPlatforms() throws IOException;
+
+    Boolean updatePlatform(DefiPlatform platform) throws IOException;
 }
