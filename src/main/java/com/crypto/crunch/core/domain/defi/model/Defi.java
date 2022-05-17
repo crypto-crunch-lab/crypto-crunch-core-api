@@ -21,7 +21,7 @@ public class Defi {
     private String defiIconUrl;         // 디파이 아이콘 url
     private String platformIconUrl;     // 플랫폼 아이콘 url
     private String detailUrl;           // 코인딕스 상세 페이지
-    private DefiConf.DefiCoinType coinType;
+    private DefiConf.DefiCoinType coinTypes;
     private DefiSeries<Double> apySeries;    // 차트용 히스토리
     private DefiSeries<Long> tvlSeries;    // 차트용 히스토리
     private String syncYmdt;    // 싱크 일시(yyyy-MM-dd'T'HH:mm:ssZ)
