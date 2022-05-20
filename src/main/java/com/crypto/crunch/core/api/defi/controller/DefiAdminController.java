@@ -2,6 +2,7 @@ package com.crypto.crunch.core.api.defi.controller;
 
 import com.crypto.crunch.core.api.common.model.DefaultResponse;
 import com.crypto.crunch.core.api.defi.service.DefiService;
+import com.crypto.crunch.core.domain.defi.model.Defi;
 import com.crypto.crunch.core.domain.defi.model.DefiPlatform;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,16 @@ public class DefiAdminController {
 
     public DefiAdminController(DefiService defiService) {
         this.defiService = defiService;
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Boolean> updateDefi(@RequestBody Defi defi) throws IOException {
+        Boolean isSuccess = defiService.updateDefi(defi);
+        if (isSuccess) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/platforms")

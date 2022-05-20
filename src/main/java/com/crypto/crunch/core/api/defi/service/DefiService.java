@@ -35,6 +35,8 @@ public interface DefiService {
      */
     List<String> getNetworks() throws IOException;
 
+    Boolean updateDefi(Defi defi) throws IOException;
+
     List<DefiPlatform> getPlatforms() throws IOException;
 
     Boolean updatePlatform(DefiPlatform platform) throws IOException;

@@ -141,6 +141,14 @@ public class DefiServiceImpl implements DefiService {
     }
 
     @Override
+    public Boolean updateDefi(Defi defi) throws IOException {
+        UpdateRequest updateRequest = new UpdateRequest(DefiConf.DEFI_INDEX, defi.getId());
+        updateRequest.doc(objectMapper.writeValueAsString(defi), XContentType.JSON);
+        UpdateResponse updateResponse = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+        return updateResponse.status().equals(RestStatus.OK);
+    }
+
+    @Override
     public List<DefiPlatform> getPlatforms() throws IOException {
         SearchRequest searchRequest = new SearchRequest(DefiConf.DEFI_PLATFORM_INDEX);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
