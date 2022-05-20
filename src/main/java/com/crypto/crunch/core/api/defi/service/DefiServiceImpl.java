@@ -88,6 +88,8 @@ public class DefiServiceImpl implements DefiService {
             boolQueryBuilder.must(subBoolQueryBuilder);
         }
 
+        boolQueryBuilder.must(QueryBuilders.termQuery("isService", true));
+
         searchSourceBuilder.query(boolQueryBuilder);
         searchSourceBuilder.fetchSource(null, new String[]{"apySeries", "tvlSeries"});
         searchRequest.source(searchSourceBuilder);

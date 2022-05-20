@@ -29,4 +29,6 @@ public class Defi {
     private String syncYmdt;    // 싱크 일시(yyyy-MM-dd'T'HH:mm:ssZ)
     private String updateYmdt;  // 업데이트 일시(yyyy-MM-dd'T'HH:mm:ssZ)
     private String historyUpdateYmdt; // 차트용 히스토리 업데이트 일시 (yyyy-MM-dd'T'HH:mm:ssZ)
+    private Boolean isService;  // 서비스 노출 여부
+    private Boolean isRecommend; // 서비스 추천 노출 여부
 }
