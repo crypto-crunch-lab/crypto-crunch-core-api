@@ -88,7 +88,12 @@ public class DefiServiceImpl implements DefiService {
             boolQueryBuilder.must(subBoolQueryBuilder);
         }
 
-        boolQueryBuilder.must(QueryBuilders.termQuery("isService", true));
+        if (request.getExposureType().equals(DefiConf.DefiExposureType.SVC)) {
+            boolQueryBuilder.must(QueryBuilders.termQuery("isService", true));
+        }
+        if (request.getExposureType().equals(DefiConf.DefiExposureType.RECOMM)) {
+            boolQueryBuilder.must(QueryBuilders.termQuery("isRecommend", true));
+        }
 
         searchSourceBuilder.query(boolQueryBuilder);
         searchSourceBuilder.fetchSource(null, new String[]{"apySeries", "tvlSeries"});

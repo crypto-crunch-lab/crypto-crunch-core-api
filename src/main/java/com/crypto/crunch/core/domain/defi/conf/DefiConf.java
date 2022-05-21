@@ -66,4 +66,8 @@ public class DefiConf {
     public enum DefiHistoryType {
         APY, TVL
     }
+
+    public enum DefiExposureType {
+        SVC, ADMIN, RECOMM
+    }
 }
