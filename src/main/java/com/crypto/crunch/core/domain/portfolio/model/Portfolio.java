@@ -21,7 +21,7 @@ public class Portfolio {
     @Column(nullable = false)
     private Integer userId;
 
-    @Column(nullable = true, length = 20)
+    @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private PortfolioConf.PortfolioType portfolioType;
 
@@ -30,4 +30,8 @@ public class Portfolio {
 
     @Column(nullable = false, length = 300)
     private String secretKey;
+
+    public PortfolioConf.PortfolioType getPortfolioType() {
+        return portfolioType;
+    }
 }

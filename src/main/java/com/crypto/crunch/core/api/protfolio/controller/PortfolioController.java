@@ -2,6 +2,7 @@ package com.crypto.crunch.core.api.protfolio.controller;
 
 import com.crypto.crunch.core.api.common.model.DefaultResponse;
 import com.crypto.crunch.core.api.protfolio.service.PortfolioService;
+import com.crypto.crunch.core.domain.portfolio.conf.PortfolioConf;
 import com.crypto.crunch.core.domain.portfolio.exception.PortfolioException;
 import com.crypto.crunch.core.domain.portfolio.model.Portfolio;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RequestMapping("/api/v1/portfolio")
@@ -22,11 +25,11 @@ public class PortfolioController {
         this.portfolioService = portfolioService;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<DefaultResponse<?>> signup(@RequestBody Portfolio portfolio) {
+    @PostMapping(value = "/save")
+    public ResponseEntity<DefaultResponse<?>> signup(@RequestBody Portfolio portfolio, @RequestHeader("accessToken") String accessToken) {
         try {
             return new ResponseEntity<>(DefaultResponse.<Portfolio>builder()
-                    .data(portfolioService.save(portfolio))
+                    .data(portfolioService.save(portfolio, accessToken))
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.CREATED.value())
                     .build(), HttpStatus.CREATED);
@@ -51,11 +54,12 @@ public class PortfolioController {
         }
     }
 
-    @GetMapping("/Key")
-    public ResponseEntity<DefaultResponse<?>> getPortfolio(@RequestBody Integer userId, String provider) {
+    @GetMapping(value = "/key")
+    public ResponseEntity<DefaultResponse<?>> getPortfolioList(@RequestBody Map<String, String> body, @RequestHeader("accessToken") String accessToken) {
         try {
-            DefaultResponse<Portfolio> response = DefaultResponse.<Portfolio>builder()
-                    .data(portfolioService.findPortfolioByProvider(userId, provider).get())
+            PortfolioConf.PortfolioType portfolioType = PortfolioConf.PortfolioType.valueOf(body.get("portfolioType"));
+            DefaultResponse<List<Portfolio>> response = DefaultResponse.<List<Portfolio>>builder()
+                    .data(portfolioService.findPortfolioByProvider(accessToken, portfolioType))
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.OK.value())
                     .build();
@@ -70,11 +74,36 @@ public class PortfolioController {
         }
     }
 
-    @GetMapping("/")
-    public ResponseEntity<DefaultResponse<?>> getAllPortfolio(@RequestBody Integer userId) {
+    @GetMapping(value = "/key/{id}")
+    public ResponseEntity<DefaultResponse<?>> getPortfolio(@PathVariable("id") Integer id, @RequestHeader("accessToken") String accessToken) {
+        try {
+            Optional<Portfolio> portfolio = portfolioService.findPortfolioById(accessToken, id);
+            if (portfolio.isPresent()) {
+                DefaultResponse<Portfolio> response = DefaultResponse.<Portfolio>builder()
+                        .data(portfolio.get())
+                        .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
+                        .status(HttpStatus.OK.value())
+                        .build();
+                System.out.println(portfolio);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                throw new PortfolioException(PortfolioException.PortfolioExceptionType.FAIL_TO_FIND_API_KEY, PortfolioException.FAIL_TO_FIND_API_KEY.getMessage());
+            }
+        } catch (PortfolioException e) {
+            log.error(String.format("error message : %s", e.getMessage()));
+
+            return new ResponseEntity<>(DefaultResponse.builder()
+                    .message(e.getMessage())
+                    .status(HttpStatus.NOT_FOUND.value())
+                    .build(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "")
+    public ResponseEntity<DefaultResponse<?>> getAllPortfolio(@RequestHeader("accessToken") String accessToken) {
         try {
             DefaultResponse<List<Portfolio>> response = DefaultResponse.<List<Portfolio>>builder()
-                    .data(portfolioService.findAllPortfolios(userId))
+                    .data(portfolioService.findAllPortfolios(accessToken))
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.OK.value())
                     .build();

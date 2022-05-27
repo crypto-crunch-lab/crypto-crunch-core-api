@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PortfolioRepository extends JpaRepository<Portfolio, Integer> {
-    Optional<Portfolio> findByUserIdAndPortfolioType(Integer userId, PortfolioConf.PortfolioType portfolioType);
-
+    List<Portfolio> findByPortfolioTypeAndUserId(PortfolioConf.PortfolioType portfolioType, Integer userId);
     List<Portfolio> findByUserId(Integer userId);
 }
