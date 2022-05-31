@@ -1,8 +1,8 @@
-package com.crypto.crunch.core.api.coin.controller;
+package com.crypto.crunch.core.api.portfolio.controller;
 
-import com.crypto.crunch.core.api.coin.service.CoinService;
+import com.crypto.crunch.core.api.portfolio.service.PortfolioService;
 import com.crypto.crunch.core.api.common.model.DefaultResponse;
-import com.crypto.crunch.core.domain.coin.model.Coin;
+import com.crypto.crunch.core.domain.portfolio.model.Portfolio;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,20 +12,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RequestMapping("/api/v1/coin")
+@RequestMapping("/api/v1/portfolio")
 @RestController
-public class CoinController {
-    private final CoinService coinService;
+public class PortfolioController {
+    private final PortfolioService portfolioService;
 
-    public CoinController(CoinService coinService){
-        this.coinService = coinService;
+    public PortfolioController(PortfolioService portfolioService){
+        this.portfolioService = portfolioService;
     }
 
     @PostMapping(value="/save")
-    public ResponseEntity<DefaultResponse<?>> save(@RequestHeader("accessToken") String accessToken, @RequestBody Coin coin){
+    public ResponseEntity<DefaultResponse<?>> save(@RequestHeader("accessToken") String accessToken, @RequestBody Portfolio portfolio){
         try{
-            coinService.saveAveragePrice(accessToken, coin);
-            return new ResponseEntity<>(DefaultResponse.<Coin>builder()
+            portfolioService.saveAveragePrice(accessToken, portfolio);
+            return new ResponseEntity<>(DefaultResponse.<Portfolio>builder()
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.CREATED.value())
                     .build(), HttpStatus.CREATED);
@@ -38,8 +38,8 @@ public class CoinController {
     @GetMapping(value="/")
     public ResponseEntity<DefaultResponse<?>> getList(@RequestHeader("accessToken") String accessToken){
         try{
-            DefaultResponse<Optional<List<Coin>>> response = DefaultResponse.<Optional<List<Coin>>>builder()
-                    .data(coinService.getCoinList(accessToken))
+            DefaultResponse<Optional<List<Portfolio>>> response = DefaultResponse.<Optional<List<Portfolio>>>builder()
+                    .data(portfolioService.getPortfolioList(accessToken))
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.OK.value())
                     .build();

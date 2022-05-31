@@ -1,7 +1,6 @@
 package com.crypto.crunch.core.domain.portfolio.model;
 
-
-import com.crypto.crunch.core.domain.portfolio.conf.PortfolioConf;
+import com.crypto.crunch.core.domain.asset.model.Asset;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,20 +17,11 @@ public class Portfolio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private Integer userId;
+    @OneToOne
+    @JoinColumn(name="id")
+    Asset asset;
 
-    @Column(length = 20)
-    @Enumerated(EnumType.STRING)
-    private PortfolioConf.PortfolioType portfolioType;
+    String symbol;
 
-    @Column(nullable = false, length = 200)
-    private String apiKey;
-
-    @Column(nullable = false, length = 300)
-    private String secretKey;
-
-    public PortfolioConf.PortfolioType getPortfolioType() {
-        return portfolioType;
-    }
+    Long averagePrice;
 }
