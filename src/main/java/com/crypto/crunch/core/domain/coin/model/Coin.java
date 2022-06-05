@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "portfolio")
+@Entity(name = "coin")
 @ToString
 public class Coin {
     @Id
