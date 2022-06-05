@@ -15,4 +15,5 @@ public class DefiPlatform {
     private String id;
     private String name;
     private List<DefiConf.DefiAttributeType> attributes;
+    private String platformIconUrl;
 }
