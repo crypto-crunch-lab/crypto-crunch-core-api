@@ -26,7 +26,7 @@ public class AssetController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<DefaultResponse<?>> signup(@RequestBody Asset asset, @RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<DefaultResponse<?>> signup(@RequestBody Asset asset, @RequestHeader("Authorization") String accessToken) {
         try {
             return new ResponseEntity<>(DefaultResponse.<Asset>builder()
                     .data(assetService.save(asset, accessToken))
@@ -55,7 +55,7 @@ public class AssetController {
     }
 
     @GetMapping(value = "/key")
-    public ResponseEntity<DefaultResponse<?>> getAssetList(@RequestBody Map<String, String> body, @RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<DefaultResponse<?>> getAssetList(@RequestBody Map<String, String> body, @RequestHeader("Authorization") String accessToken) {
         try {
             AssetConf.AssetType AssetType = AssetConf.AssetType.valueOf(body.get("AssetType"));
             DefaultResponse<List<Asset>> response = DefaultResponse.<List<Asset>>builder()
@@ -100,7 +100,7 @@ public class AssetController {
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<DefaultResponse<?>> getAllAsset(@RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<DefaultResponse<?>> getAllAsset(@RequestHeader("Authorization") String accessToken) {
         try {
             DefaultResponse<List<Asset>> response = DefaultResponse.<List<Asset>>builder()
                     .data(assetService.findAllAssets(accessToken))
