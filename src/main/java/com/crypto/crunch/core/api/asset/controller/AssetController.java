@@ -57,7 +57,7 @@ public class AssetController {
     @GetMapping(value = "/key")
     public ResponseEntity<DefaultResponse<?>> getAssetList(@RequestBody Map<String, String> body, @RequestHeader("Authorization") String accessToken) {
         try {
-            AssetConf.AssetType AssetType = AssetConf.AssetType.valueOf(body.get("AssetType"));
+            AssetConf.AssetType AssetType = AssetConf.AssetType.valueOf(body.get("assetType"));
             DefaultResponse<List<Asset>> response = DefaultResponse.<List<Asset>>builder()
                     .data(assetService.findAssetByProvider(accessToken, AssetType))
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
