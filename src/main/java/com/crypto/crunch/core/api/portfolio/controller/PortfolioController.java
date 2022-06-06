@@ -3,6 +3,8 @@ package com.crypto.crunch.core.api.portfolio.controller;
 import com.crypto.crunch.core.api.portfolio.service.PortfolioService;
 import com.crypto.crunch.core.api.common.model.DefaultResponse;
 import com.crypto.crunch.core.domain.portfolio.model.Portfolio;
+import com.crypto.crunch.core.domain.portfolio.model.PortfolioCreateRequest;
+import com.crypto.crunch.core.domain.portfolio.model.PortfolioUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +24,9 @@ public class PortfolioController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<DefaultResponse<?>> save(@RequestHeader("accessToken") String accessToken, @RequestBody Portfolio portfolio) {
+    public ResponseEntity<DefaultResponse<?>> save(@RequestHeader("Authorization") String accessToken, @RequestBody PortfolioCreateRequest portfolioCreateRequest) {
         try {
-            portfolioService.saveAveragePrice(accessToken, portfolio);
+            portfolioService.saveAveragePrice(accessToken, portfolioCreateRequest);
             return new ResponseEntity<>(DefaultResponse.<Portfolio>builder()
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.CREATED.value())
@@ -35,11 +37,11 @@ public class PortfolioController {
         }
     }
 
-    @GetMapping(value = "/")
-    public ResponseEntity<DefaultResponse<?>> getList(@RequestHeader("accessToken") String accessToken) {
+    @GetMapping(value = "")
+    public ResponseEntity<DefaultResponse<?>> getList(@RequestHeader("Authorization") String accessToken) {
         try {
-            DefaultResponse<Optional<List<Portfolio>>> response = DefaultResponse.<Optional<List<Portfolio>>>builder()
-                    .data(portfolioService.getPortfolioList(accessToken))
+            DefaultResponse<List<Portfolio>> response = DefaultResponse.<List<Portfolio>>builder()
+                    .data(portfolioService.getPortfolioList(accessToken).get())
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.OK.value())
                     .build();
@@ -54,9 +56,10 @@ public class PortfolioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DefaultResponse<?>> update(@RequestParam("id") Long id, @RequestBody Long newAveragePrice) {
+    public ResponseEntity<DefaultResponse<?>> update(@PathVariable("id") Integer id, @RequestBody PortfolioUpdateRequest portfolioUpdateRequest) {
         try {
-            portfolioService.updateAveragePrice(id, newAveragePrice);
+            System.out.println(id);
+            portfolioService.updateAveragePrice(id, portfolioUpdateRequest);
             return new ResponseEntity<>(DefaultResponse.<Portfolio>builder()
                     .message(DefaultResponse.SUCCESS_DEFAULT_MESSAGE)
                     .status(HttpStatus.OK.value())

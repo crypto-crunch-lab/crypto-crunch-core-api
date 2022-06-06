@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface PortfolioRepository extends JpaRepository<Portfolio,Long> {
-    Optional<List<Portfolio>> findAllByAssetId(Integer assetId);
+public interface PortfolioRepository extends JpaRepository<Portfolio,Integer> {
+    Optional<List<Portfolio>> findAllByUserId(Integer assetId);
 }

@@ -18,10 +18,12 @@ public class Portfolio {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="asset_id")
     Asset asset;
 
     String symbol;
 
     Long averagePrice;
+
+    Long userId;
 }
