@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-@RequestMapping("/api/v1/Asset")
+@RequestMapping("/api/v1/asset")
 @RestController
 public class AssetController {
 
@@ -75,9 +75,9 @@ public class AssetController {
     }
 
     @GetMapping(value = "/key/{id}")
-    public ResponseEntity<DefaultResponse<?>> getAsset(@PathVariable("id") Integer id, @RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<DefaultResponse<?>> getAsset(@PathVariable("id") Integer id) {
         try {
-            Optional<Asset> Asset = assetService.findAssetById(accessToken, id);
+            Optional<Asset> Asset = assetService.findAssetById(id);
             if (Asset.isPresent()) {
                 DefaultResponse<Asset> response = DefaultResponse.<Asset>builder()
                         .data(Asset.get())

@@ -11,7 +11,7 @@ public interface AssetService {
 
     List<Asset> findAssetByProvider(String accessToken, AssetConf.AssetType AssetType);
 
-    Optional<Asset> findAssetById(String accessToken, Integer id);
+    Optional<Asset> findAssetById(Integer id);
 
     List<Asset> findAllAssets(String accessToken);
 }

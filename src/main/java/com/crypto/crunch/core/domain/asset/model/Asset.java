@@ -21,6 +21,9 @@ public class Asset {
     @Column(nullable = false)
     private Integer userId;
 
+    @Column(nullable = false)
+    private String Name;
+
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private AssetConf.AssetType assetType;

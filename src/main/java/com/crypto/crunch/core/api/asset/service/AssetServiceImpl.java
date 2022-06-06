@@ -7,27 +7,25 @@ import com.crypto.crunch.core.domain.asset.model.Asset;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
 public class AssetServiceImpl implements AssetService {
-
     private final AssetRepository assetRepository;
 
     public AssetServiceImpl(AssetRepository assetRepository) {
         this.assetRepository = assetRepository;
     }
 
+
     @Override
-    public Asset save(Asset Asset, String accessToken) {
+    public Asset save(Asset asset, String accessToken) {
         try {
             int userId = Integer.parseInt(JwtTokenProvider.getUserIdFromJWT(accessToken));
             System.out.println(userId);
-            Asset.setUserId(userId);
-            return assetRepository.save(Asset);
+            asset.setUserId(userId);
+            return assetRepository.save(asset);
         } catch (DataAccessException e) {
             // 예외처리
             return null;
@@ -41,9 +39,9 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Optional<Asset> findAssetById(String accessToken, Integer id) {
-//        Integer userId = Integer.valueOf(JwtTokenProvider.getUserIdFromJWT(accessToken));
-        return assetRepository.findById(id);
+    public Optional<Asset> findAssetById(Integer id) {
+        Optional<Asset> asset = assetRepository.findById(id);
+        return asset;
     }
 
     @Override

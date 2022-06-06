@@ -38,4 +38,15 @@ public class PortfolioServiceImpl implements PortfolioService {
             return Optional.empty();
         }
     }
+
+    @Override
+    public void updateAveragePrice(Long portfolioId, Long newAveragePrice) {
+        try{
+            Portfolio portfolio = portfolioRepository.findById(portfolioId).get();
+            portfolio.setAveragePrice(newAveragePrice);
+            portfolioRepository.save(portfolio);
+        } catch (Exception e){
+
+        }
+    }
 }

@@ -9,4 +9,6 @@ public interface PortfolioService {
     void saveAveragePrice(String accesstoken, Portfolio portfolio);
 
     Optional<List<Portfolio>> getPortfolioList(String accesstoken);
+
+    void updateAveragePrice(Long portfolioId, Long newAveragePrice);
 }
