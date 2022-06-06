@@ -71,12 +71,12 @@ public class DefiServiceImpl implements DefiService {
             BoolQueryBuilder subBoolQueryBuilder = QueryBuilders.boolQuery();
 
             DefiRequestFilters filters = request.getFilters();
-            String network = filters.getNetwork();
+            String networkName = filters.getNetwork();
             DefiConf.DefiTvlRangeType tvlRange = filters.getTvlRange();
             DefiConf.DefiApyRangeType apyRange = filters.getApyRange();
 
-            if (StringUtils.isNotEmpty(network) && !StringUtils.equals(network, "ALL")) {
-                subBoolQueryBuilder.must(QueryBuilders.termQuery("network.keyword", network));
+            if (StringUtils.isNotEmpty(networkName) && !StringUtils.equals(networkName, "ALL")) {
+                subBoolQueryBuilder.must(QueryBuilders.termQuery("network.name.keyword", networkName));
             }
             if (!ObjectUtils.isEmpty(tvlRange)) {
                 subBoolQueryBuilder.must(QueryBuilders.rangeQuery("tvl").gte(tvlRange.value()));
@@ -125,7 +125,7 @@ public class DefiServiceImpl implements DefiService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         AggregationBuilder aggregationBuilder = AggregationBuilders
                 .terms("terms")
-                .field("network.keyword");
+                .field("network.name.keyword");
         searchSourceBuilder.aggregation(aggregationBuilder);
         searchRequest.source(searchSourceBuilder);
 
