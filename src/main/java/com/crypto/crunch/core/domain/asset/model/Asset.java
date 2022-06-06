@@ -22,7 +22,7 @@ public class Asset {
     private Integer userId;
 
     @Column(nullable = false)
-    private String Name;
+    private String name;
 
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
