@@ -14,7 +14,7 @@ spring:
     show-sql: true
 
 elasticsearch:
-  host: search-crpyto-crunch-elasticsearch-y2o5bnrlo2pejnym25smqkflge.ap-northeast-2.es.amazonaws.com
+  host: search-crypto-crunch-elasticsearch-mawe4gu2qxgvxwdb4mtmhb6twe.ap-northeast-2.es.amazonaws.com
   scheme: https
   port: 443
   username: admin
