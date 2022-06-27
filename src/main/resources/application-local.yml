@@ -5,7 +5,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: ENC(x5kLR3r/TpcH9z9ku5H7UxaHgKzJrf8tfrrIqne5Q2g=)
-    url: jdbc:mysql://crypto-crunch-mysql.cs2bkvg2aoc3.ap-northeast-2.rds.amazonaws.com/crypto_crunch?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://crypto-crunch-mysql.chnnp04xxp6z.ap-northeast-2.rds.amazonaws.com/crypto_crunch?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
     username: crunch_admin
   jpa:
     database: mysql
